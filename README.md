@@ -142,3 +142,33 @@ series = {MM '20}
 Acknowledgements
 ----------
 Parts of the code structure is inspired by this [TTS repository](https://github.com/r9y9/deepvoice3_pytorch). We thank the author for this wonderful code. The code for Face Detection has been taken from the [face_alignment](https://github.com/1adrianb/face-alignment) repository. We thank the authors for releasing their code and models.
+
+
+Further Development by Shuyi
+----------
+While lip-syncing video, you can also compute the cosine similarity between the video and audio embeddings. This could be used to detect and match the voice to the person in any video.
+```bash
+python inference.py --checkpoint_path <GAN ckpt> --syncnet_checkpoint_path <SyncNet ckpt>  --face <video.mp4> --audio <an-audio-source> 
+```
+
+Here are some datapoints:
+```
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/chinese_shuyi.mp4 --audio ./sample_data/chinese_shuyi.mp4
+DescribeResult(nobs=207, minmax=(0.0, 0.9759844), mean=0.52837175, variance=0.06384362, skewness=-0.2030022293329239, kurtosis=-0.9478885536467487)
+```
+```
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/chinese_shuyi.mp4 --audio ./sample_data/japanese_shuyi.mp4
+DescribeResult(nobs=212, minmax=(0.0, 0.88642454), mean=0.22506772, variance=0.05906559, skewness=0.853131890296936, kurtosis=-0.46799933113297065)
+```
+```
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/silence_shuyi.mp4 --audio ./sample_data/chinese_shuyi.mp4
+DescribeResult(nobs=207, minmax=(0.0, 0.8705838), mean=0.25465956, variance=0.05431626, skewness=0.9279311895370483, kurtosis=0.11473465641982417)
+```
+```
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/japanese_shuyi.mp4 --audio ./sample_data/japanese_shuyi.mp4
+DescribeResult(nobs=212, minmax=(0.0, 0.9585642), mean=0.5192854, variance=0.07212567, skewness=-0.32968321442604065, kurtosis=-0.9731913222597024)
+```
+```
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/input_vid.mp4 --audio ./sample_data/japanese_shuyi.mp4
+DescribeResult(nobs=179, minmax=(0.0, 0.90442127), mean=0.14771806, variance=0.035665836, skewness=1.5768992900848389, kurtosis=2.204756945157232)
+```
