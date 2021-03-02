@@ -153,22 +153,37 @@ python inference.py --checkpoint_path <GAN ckpt> --syncnet_checkpoint_path <Sync
 
 Here are some datapoints:
 ```
-python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/chinese_shuyi.mp4 --audio ./sample_data/chinese_shuyi.mp4
-DescribeResult(nobs=207, minmax=(0.0, 0.9759844), mean=0.52837175, variance=0.06384362, skewness=-0.2030022293329239, kurtosis=-0.9478885536467487)
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/jianshuo.mp4 --audio ./sample_data/jianshuo.mp4
+DescribeResult(nobs=438, minmax=(0.0, 0.9443385), mean=0.42116854, variance=0.058130573, skewness=0.05907813832163811, kurtosis=-1.0286275463434906)
+p10: 0.08, p25: 0.22, p50: 0.42, p75: 0.62, p90: 0.74, p99: 0.90
 ```
 ```
-python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/chinese_shuyi.mp4 --audio ./sample_data/japanese_shuyi.mp4
-DescribeResult(nobs=212, minmax=(0.0, 0.88642454), mean=0.22506772, variance=0.05906559, skewness=0.853131890296936, kurtosis=-0.46799933113297065)
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/japanese_shuyi.mp4 --audio ./sample_data/jianshuo.mp4
+DescribeResult(nobs=215, minmax=(0.0, 0.9430385), mean=0.29026434, variance=0.06154137, skewness=0.8012748956680298, kurtosis=-0.3481391531888973)
+p10: 0.02, p25: 0.09, p50: 0.22, p75: 0.43, p90: 0.69, p99: 0.89
 ```
 ```
-python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/silence_shuyi.mp4 --audio ./sample_data/chinese_shuyi.mp4
-DescribeResult(nobs=207, minmax=(0.0, 0.8705838), mean=0.25465956, variance=0.05431626, skewness=0.9279311895370483, kurtosis=0.11473465641982417)
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/jianshuo.mp4 --audio ./sample_data/japanese_shuyi.mp4
+DescribeResult(nobs=128, minmax=(0.0, 0.89793915), mean=0.25101477, variance=0.07181115, skewness=0.8461629748344421, kurtosis=-0.7091229200151696)
+p10: 0.00, p25: 0.03, p50: 0.13, p75: 0.46, p90: 0.70, p99: 0.86
 ```
 ```
 python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/japanese_shuyi.mp4 --audio ./sample_data/japanese_shuyi.mp4
-DescribeResult(nobs=212, minmax=(0.0, 0.9585642), mean=0.5192854, variance=0.07212567, skewness=-0.32968321442604065, kurtosis=-0.9731913222597024)
+DescribeResult(nobs=210, minmax=(8.444454e-05, 0.9060303), mean=0.36490947, variance=0.056687847, skewness=0.3158748745918274, kurtosis=-0.8031536448764061)
+p10: 0.05,p25: 0.17, p50: 0.36, p75: 0.52, p90: 0.73, p99: 0.8
 ```
 ```
-python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/input_vid.mp4 --audio ./sample_data/japanese_shuyi.mp4
-DescribeResult(nobs=179, minmax=(0.0, 0.90442127), mean=0.14771806, variance=0.035665836, skewness=1.5768992900848389, kurtosis=2.204756945157232)
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/jianshuo.mp4 --audio ./sample_data/chinese_shuyi.mp4
+DescribeResult(nobs=125, minmax=(0.0, 0.8436722), mean=0.24473234, variance=0.043096665, skewness=0.6187342405319214, kurtosis=-0.4236573827089454)
+p10: 0.00, p25: 0.06, p50: 0.20, p75: 0.40, p90: 0.52, p99: 0.75
+```
+```
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/chinese_shuyi.mp4 --audio ./sample_data/chinese_shuyi.mp4
+DescribeResult(nobs=205, minmax=(0.0, 0.94574463), mean=0.40593112, variance=0.06666576, skewness=0.21177418529987335, kurtosis=-1.025729413071115)
+p10: 0.07, p25: 0.17, p50: 0.39, p75: 0.61, p90: 0.77, p99: 0.93
+```
+```
+python inference.py --checkpoint_path checkpoints/wav2lip_gan.pth --syncnet_checkpoint_path checkpoints/lipsync_expert.pth --face ./sample_data/japanese_shuyi.mp4 --audio ./sample_data/chinese_shuyi.mp4
+DescribeResult(nobs=205, minmax=(0.0, 0.8347237), mean=0.16204377, variance=0.045178425, skewness=1.3090776205062866, kurtosis=0.4914041926690236)
+p10: 0.00, p25: 0.01, p50: 0.05, p75: 0.26, p90: 0.53, p99: 0.76
 ```

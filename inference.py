@@ -94,6 +94,7 @@ def face_detect(images):
 	for rect, image in zip(predictions, images):
 		if rect is None:
 			cv2.imwrite('temp/faulty_frame.jpg', image) # check this frame where the face was not detected.
+			print('WARNING: Face not detected! Ensure the video contains a face in all the frames.')
 			raise ValueError('Face not detected! Ensure the video contains a face in all the frames.')
 
 		y1 = max(0, rect[1] - pady1)
@@ -266,20 +267,22 @@ def main():
 
 	wav = audio.load_wav(args.audio, 16000)
 	mel = audio.melspectrogram(wav)
-	print(mel.shape)
+	print("mel.shape: {0}, len(mel[0]): {1}".format(mel.shape, len(mel[0])))
 
 	if np.isnan(mel.reshape(-1)).sum() > 0:
 		raise ValueError('Mel contains nan! Using a TTS voice? Add a small epsilon noise to the wav file and try again')
 
 	mel_chunks = []
 
-	# Shuyi: In order to correctly match video and audio, we need to add two dummy chunks here. Other wise, the
+	# Shuyi: In order to correctly match video and audio, we need to add four dummy chunks here. Other wise, the
 	# detector does not perform well. The hypothesis is that the video and video are misaligned during window crop.
+	frame_offset = 4
 	if args.syncnet_checkpoint_path:
-		mel_chunks.append(np.zeros((80, 16)))
-		mel_chunks.append(np.zeros((80, 16)))
+		for i in range(frame_offset):
+			mel_chunks.append(np.zeros((80, 16)))
 
 	mel_idx_multiplier = 80. / fps
+	print("fps is {0}, mel index multiplier is {1}".format(fps, mel_idx_multiplier))
 	i = 0
 	while 1:
 		start_idx = int(i * mel_idx_multiplier)
@@ -291,6 +294,12 @@ def main():
 
 	print("Length of mel chunks: {}".format(len(mel_chunks)))
 
+	# when audio is longer than video
+	if args.syncnet_checkpoint_path and len(mel_chunks) > len(full_frames) + frame_offset:
+		print("In SyncNet detection mode but audio is longer than video, truncating audio to use only the front part !!!!")
+		mel_chunks = mel_chunks[:len(full_frames) + frame_offset]
+
+	# when video is longer than audio
 	full_frames = full_frames[:len(mel_chunks)]
 
 	batch_size = args.wav2lip_batch_size
@@ -331,7 +340,7 @@ def main():
 				print("video embedding shape: {0}".format(video_embedding.shape))
 				batched_cos_sim = compute_batched_embed_cos_sim(audio_embedding, video_embedding)
 				if cos_sim_array is None:
-					cos_sim_array = batched_cos_sim
+					cos_sim_array = batched_cos_sim[frame_offset:]
 				else:
 					cos_sim_array = np.concatenate((cos_sim_array, batched_cos_sim))
 
@@ -349,9 +358,18 @@ def main():
 	command = 'ffmpeg -y -i {} -i {} -strict -2 -q:v 1 {}'.format(args.audio, 'temp/result.avi', args.outfile)
 	subprocess.call(command, shell=platform.system() != 'Windows')
 
-	# print the cos sim stats
-	print("cos_sim_array.shape: {0}".format(cos_sim_array.shape))
-	print(scipy.stats.describe(cos_sim_array))
+	if cos_sim_array is not None:
+		# print the cos sim stats
+		print("cos_sim_array.shape: {0}".format(cos_sim_array.shape))
+		print(scipy.stats.describe(cos_sim_array))
+		print("p10: {p10:.2f}, p25: {p25:.2f}, p50: {p50:.2f}, p75: {p75:.2f}, p90: {p90:.2f}, p99: {p99:.2f}".format(
+			p10=np.quantile(cos_sim_array, 0.1),
+			p25=np.quantile(cos_sim_array, 0.25),
+			p50=np.quantile(cos_sim_array, 0.5),
+			p75=np.quantile(cos_sim_array, 0.75),
+			p90=np.quantile(cos_sim_array, 0.9),
+			p99=np.quantile(cos_sim_array, 0.99)))
+
 
 if __name__ == '__main__':
 	main()
